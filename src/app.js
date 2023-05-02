@@ -1,4 +1,5 @@
 import express from 'express'
+import jwt from 'jsonwebtoken'
 import { findUser, createUser } from "./controllers/userController.js"
 import mongoose from './config/database.js'
 

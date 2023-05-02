@@ -1,5 +1,9 @@
 import User from '../models/user.js'
 import bcrypt from 'bcryptjs'
+import dotenv from 'dotenv'
+import jwt from 'jsonwebtoken'
+
+dotenv.config()
 
 export const createUser = async (req, res) => {
   try {
@@ -16,7 +20,7 @@ export const createUser = async (req, res) => {
 }
 
 export const findUser = async (req, res) => {
- 
+
   try {
 
     const { username, password } = req.body
@@ -28,7 +32,24 @@ export const findUser = async (req, res) => {
       const isValidPassword = await bcrypt.compare(password, user.passwordHash)
 
       if (isValidPassword) {
-        res.json('Usuario validado!');
+
+        const token = jwt.sign(
+          { username: user.username, email: user.username },
+          process.env.ACCESS_TOKEN_SECRET,
+          { expiresIn: "15m" }
+        )
+
+        res.json({
+          data: [
+            {
+              user: user
+            },
+            {
+              JWT_TOKEN: token
+            }
+          ]
+        });
+
       } else {
         res.json('Contraseña incorrecta!')
       }
