@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose"
-import bcrypt from "bcrypt"
+import bcrypt from "bcryptjs"
 
 const userSchema = new Schema({
   username: {
@@ -14,7 +14,7 @@ const userSchema = new Schema({
     unique: true,
     lowercase: true
   },
-  password: {
+  passwordHash: {
     type: String,
     required: true
   }
@@ -22,21 +22,21 @@ const userSchema = new Schema({
 
 userSchema.virtual('password')
   .set(function (password) {
-    this._password = password;
-    this.passwordHash = this.encryptPassword(password);
+    this._password = password
+    this.passwordHash = this.encryptPassword(password)
   })
   .get(function () {
-    return this._password;
-  });
+    return this._password
+  })
 
 userSchema.methods.encryptPassword = function (password) {
-  return bcrypt.hashSync(password, 10);
-};
+  return bcrypt.hashSync(password, 10)
+}
 
 userSchema.methods.isValidPassword = function (password) {
-  return bcrypt.compareSync(password, this.passwordHash);
-};
+  return bcrypt.compareSync(password, this.passwordHash)
+}
 
-const User = model('User', userSchema);
+const User = model('User', userSchema)
 
-export default User;
+export default User
