@@ -16,7 +16,7 @@ export const isAuth = (req, res, next) => {
   try {
     const token = authorization.split(" ")[1]
     const payload = verify(token, process.env.ACCESS_TOKEN_SECRET)
-    
+    req.user = payload.user
     next()
   } catch (error) {
     res.status(401).json({ msg: "Token invalido." })

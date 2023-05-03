@@ -42,17 +42,19 @@ export const findUser = async (req, res) => {
       if (isValidPassword) {
 
         const token = jwt.sign(
-          { username: user.username, email: user.username },
+          {
+            user: { username: user.username, email: user.email }
+          },
           process.env.ACCESS_TOKEN_SECRET,
           { expiresIn: "15m" }
         )
 
         res.json({
           data:
-            {
-              user: user,
-              JWT_TOKEN: token
-            }
+          {
+            user: user,
+            JWT_TOKEN: token
+          }
         })
 
       } else {
