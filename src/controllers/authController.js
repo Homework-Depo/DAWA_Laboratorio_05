@@ -6,9 +6,9 @@ const verify = jwt.verify
 dotenv.config()
 
 export const isAuth = (req, res, next) => {
-
-  const authorization = req.headers['authorization']
-
+  
+  const authorization = req.headers['x-access-token']
+  console.log(authorization)
   if (!authorization) {
     return res.status(401).json({ msg: "Token de autorizacion no encontrado." })
   }

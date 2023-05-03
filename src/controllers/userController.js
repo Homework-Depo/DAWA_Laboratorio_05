@@ -42,19 +42,16 @@ export const findUser = async (req, res) => {
       if (isValidPassword) {
 
         const token = jwt.sign(
-          {
-            user: { username: user.username, email: user.email }
-          },
+          { user },
           process.env.ACCESS_TOKEN_SECRET,
           { expiresIn: "15m" }
         )
 
-        res.json({
-          data:
-          {
-            user: user,
-            JWT_TOKEN: token
-          }
+        //res.cookie('jwt_token', token, { httpOnly: true, secure: true })
+        // res.setHeader('Authorization', `Bearer ${token}`)
+
+        res.redirect('./dashboard', 301, {
+          'x-access-token' : `Bearer ${token}`
         })
 
       } else {
