@@ -1,6 +1,7 @@
 import express from 'express'
 import jwt from 'jsonwebtoken'
 import { findUser, createUser } from "./controllers/userController.js"
+import { isAuth } from './controllers/authController.js'
 import mongoose from './config/database.js'
 
 const app = express()
@@ -15,4 +16,8 @@ app.post('/login', findUser)
 app.get('/register', (req, res) => {
 })
 
-export default app;
+app.get('/dashboard', isAuth, (req, res) => {
+  res.json("Hola")
+})
+
+export default app

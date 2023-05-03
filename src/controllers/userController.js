@@ -12,7 +12,15 @@ export const createUser = async (req, res) => {
     const user = new User({ username, email, password })
 
     await user.save()
-    res.json(user)
+
+    res.json({
+      data: [
+        {
+          user: user
+        }
+      ]
+    })
+
   } catch (error) {
     console.error(error)
     res.status(500).send('Server Error')
@@ -40,15 +48,12 @@ export const findUser = async (req, res) => {
         )
 
         res.json({
-          data: [
+          data:
             {
-              user: user
-            },
-            {
+              user: user,
               JWT_TOKEN: token
             }
-          ]
-        });
+        })
 
       } else {
         res.json('Contraseña incorrecta!')
