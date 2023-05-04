@@ -19,7 +19,7 @@ export const isAuth = (req, res, next) => {
     req.user = payload.user
     next()
   } catch (error) {
-    res.status(401).json({ msg: "Token invalido." })
+    res.redirect('./login', 401)
   }
 
   return next()
