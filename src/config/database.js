@@ -12,11 +12,11 @@ mongoose.connect(
 }
 )
 
-mongoose.connection.on('error', console.error.bind(console, 'Error al conectarse con la base de datos.'));
+mongoose.connection.on('error', console.error.bind(console, 'Error al conectarse con la base de datos.'))
 
 mongoose.connection.once('open', () => {
-  console.log('Conexión con la base de datos iniciada.');
-});
+  console.log('Conexión con la base de datos iniciada.')
+})
 
 export default mongoose
 
