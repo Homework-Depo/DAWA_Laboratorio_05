@@ -13,13 +13,15 @@ export const createUser = async (req, res) => {
 
     await user.save()
 
-    res.json({
-      data: [
-        {
-          user: user
-        }
-      ]
-    })
+    const token = jwt.sign(
+      { user },
+      process.env.ACCESS_TOKEN_SECRET,
+      { expiresIn: "15m" }
+    )
+
+    res.cookie('jwt_token', token, { httpOnly: true, secure: true })
+
+    res.redirect('./dashboard')
 
   } catch (error) {
     console.error(error)
@@ -47,12 +49,9 @@ export const findUser = async (req, res) => {
           { expiresIn: "15m" }
         )
 
-        //res.cookie('jwt_token', token, { httpOnly: true, secure: true })
-        // res.setHeader('Authorization', `Bearer ${token}`)
+        res.cookie('jwt_token', token, { httpOnly: true, secure: true })
 
-        res.redirect('./dashboard', 301, {
-          'x-access-token' : `Bearer ${token}`
-        })
+        res.redirect('/dashboard')
 
       } else {
         res.json('Contraseña incorrecta!')

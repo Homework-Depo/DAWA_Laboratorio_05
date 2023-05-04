@@ -7,14 +7,14 @@ dotenv.config()
 
 export const isAuth = (req, res, next) => {
   
-  const authorization = req.headers['x-access-token']
-  console.log(authorization)
-  if (!authorization) {
-    return res.status(401).json({ msg: "Token de autorizacion no encontrado." })
+  //const authorization = req.headers['authorization']
+  const token = req.cookies.jwt_token
+
+  if (!token) {
+    res.redirect('/login').status(401)
   }
 
   try {
-    const token = authorization.split(" ")[1]
     const payload = verify(token, process.env.ACCESS_TOKEN_SECRET)
     req.user = payload.user
     next()
@@ -23,4 +23,16 @@ export const isAuth = (req, res, next) => {
   }
 
   return next()
+}
+
+export const logout = (req, res) => {
+
+  const token = req.cookies.jwt_token
+
+  if (!token) {
+    return res.redirect('./login')
+  }
+
+  res.clearCookie('jwt_token')
+  res.redirect('./login')
 }
